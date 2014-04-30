@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row"
+    style="@style/ContactRow">
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:text="@string/unknown_contact"
+        style="@style/ContactRowText"/>
+
+</LinearLayout>

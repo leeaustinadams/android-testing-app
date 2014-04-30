@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SampleApp</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="contact">Contact</string>
+    <string name="contacts">Contacts</string>
+    <string name="refresh">Refresh</string>
+    <string name="no_contacts_text">No Contacts</string>
+    <string name="unknown_contact">Unknown</string>
+    <string name="my_profile">My Profile</string>
+    <string name="no_phone_number"/>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_home">Home</string>
+
+</resources>
