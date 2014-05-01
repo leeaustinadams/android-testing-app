@@ -5,3 +5,7 @@
 .idea
 gradle
 local.properties
+build/
+bin/
+*.bak
+*.iml
