@@ -28,7 +28,8 @@ public class PhoneNumberHelperTest extends AndroidTestCase {
                 mockTelephonyManager);
         when(mockTelephonyManager.getLine1Number()).thenReturn(MOCK_NUMBER);
 
-        final String actualNumber = PhoneNumberHelper.getPhoneNumber(mockContext);
+        final PhoneNumberHelper phoneNumberHelper = new PhoneNumberHelperImpl(mockContext);
+        final String actualNumber = phoneNumberHelper.getPhoneNumber();
         assertEquals(FORMATTED_NUMBER, actualNumber);
     }
 
@@ -40,6 +41,7 @@ public class PhoneNumberHelperTest extends AndroidTestCase {
                 mockTelephonyManager);
         when(mockTelephonyManager.getLine1Number()).thenReturn("");
 
-        assertFalse(PhoneNumberHelper.hasPhoneNumber(mockContext));
+        final PhoneNumberHelper phoneNumberHelper = new PhoneNumberHelperImpl(mockContext);
+        assertFalse(phoneNumberHelper.hasPhoneNumber());
     }
 }

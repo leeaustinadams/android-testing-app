@@ -9,15 +9,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.sample.library.contact.PhoneNumberHelper;
+import com.sample.library.contact.PhoneNumberHelperFactory;
 
 public class ProfileActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        if (PhoneNumberHelper.hasPhoneNumber(this)) {
+        final PhoneNumberHelper phoneNumberHelper = PhoneNumberHelperFactory.get(this);
+        if (phoneNumberHelper.hasPhoneNumber()) {
             final TextView phoneNumber = (TextView) findViewById(R.id.profile_phone_number);
-            phoneNumber.setText(PhoneNumberHelper.getPhoneNumber(this));
+            phoneNumber.setText(phoneNumberHelper.getPhoneNumber());
             phoneNumber.setVisibility(View.VISIBLE);
         }
     }

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.sample.library.contact.ContactFetcherFactory;
 import com.sample.library.contact.ContactFetcher;
 
 public class ContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -29,7 +30,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final Cursor cursor = ContactFetcher.fetchContacts(getActivity());
+        final ContactFetcher contactFetcher = ContactFetcherFactory.get();
+        final Cursor cursor = contactFetcher.fetchContacts(getActivity());
         mAdapter = new SimpleCursorAdapter(
                 getActivity(), R.layout.contact_row, cursor,
                 new String[] { ContactsContract.Contacts.DISPLAY_NAME },
@@ -50,7 +52,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private void refreshContacts() {
-        final Cursor cursor = ContactFetcher.fetchContacts(getActivity());
+        final ContactFetcher contactFetcher = ContactFetcherFactory.get();
+        final Cursor cursor = contactFetcher.fetchContacts(getActivity());
         mAdapter.changeCursor(cursor);
         updateList(cursor.getCount() > 0);
     }
