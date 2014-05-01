@@ -11,6 +11,10 @@ import com.sample.app.R;
 import com.sample.library.contact.ContactFetcher;
 import com.sample.library.contact.ContactFetcherFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.android.apps.common.testing.ui.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static org.mockito.MockitoAnnotations.Mock;
 import static org.mockito.Mockito.when;
@@ -54,7 +58,8 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     }
 
     public void testNoContactsWhenCursorEmpty() {
-        final MatrixCursor cursor = new MatrixCursor(mProjection, 0);
+        final List<Object[]> rows = new ArrayList<>();
+        final Cursor cursor = getFakeContactsCursor(mProjection, rows);
         when(mMockContactFetcher.fetchContacts(any(Context.class))).thenReturn(cursor);
         getActivity();
         onView(withId(R.id.no_contacts_label)).check(matches(isDisplayed()));
@@ -62,10 +67,12 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     }
 
     public void testWithContacts() {
-        final MatrixCursor cursor = new MatrixCursor(mProjection, 0);
-        for (int i = 0; i < 5; i++) {
-            cursor.addRow(new Object[] { i, "Contact" + i });
+        final int count = 15;
+        final List<Object[]> rows = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            rows.add(new Object[] { i, "Contact" + i });
         }
+        final Cursor cursor = getFakeContactsCursor(mProjection, rows);
         when(mMockContactFetcher.fetchContacts(any(Context.class))).thenReturn(cursor);
         getActivity();
         onView(withId(R.id.no_contacts_label)).check(matches(not(isDisplayed())));
@@ -77,10 +84,12 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     }
 
     public void testClickContact() {
-        final MatrixCursor cursor = new MatrixCursor(mProjection, 0);
+        final int count = 15;
+        final List<Object[]> rows = new ArrayList<>(count);
         for (int i = 0; i < 15; i++) {
-            cursor.addRow(new Object[] { i, "Contact" + i });
+            rows.add(new Object[] { i, "Contact" + i });
         }
+        final Cursor cursor = getFakeContactsCursor(mProjection, rows);
         when(mMockContactFetcher.fetchContacts(any(Context.class))).thenReturn(cursor);
         getActivity();
         onData(instanceOf(Cursor.class)).atPosition(10)
@@ -88,5 +97,27 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
                 .perform(click());
         onView(withId(R.id.contact_name)).check(matches(isDisplayed()))
                 .check(matches(withText("Contact" + 10)));
+    }
+
+    public void testNavigateToProfile() {
+        final int count = 5;
+        final List<Object[]> rows = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            rows.add(new Object[] {i, "Contact" + i});
+        }
+        final Cursor cursor = getFakeContactsCursor(mProjection, rows);
+        when(mMockContactFetcher.fetchContacts(any(Context.class))).thenReturn(cursor);
+        getActivity();
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.my_profile)).perform(click());
+        onView(withText(R.string.my_profile)).check(matches(isDisplayed()));
+    }
+
+    private Cursor getFakeContactsCursor(final String[] columns, final List<Object[]> rows) {
+        final MatrixCursor cursor = new MatrixCursor(columns, 0);
+        for (int i = 0; i < rows.size(); i++) {
+            cursor.addRow(rows.get(i));
+        }
+        return cursor;
     }
 }
